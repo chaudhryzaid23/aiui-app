@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MarkdownModule } from 'ngx-markdown';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [LayoutComponent, AiQueryComponent, MarkdownEditorComponent],
