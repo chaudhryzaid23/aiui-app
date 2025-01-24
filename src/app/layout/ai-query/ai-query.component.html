@@ -1,0 +1,23 @@
+<mat-tab-group [(selectedIndex)]="selectedTab">
+    <mat-tab label="OpenAI">
+        <button mat-raised-button (click)="askAI('openai')">Ask OpenAI</button>
+        <p *ngFor="let para of responses.openai?.split('\n')">
+            {{ para }}
+            <button mat-button (click)="includeParagraph(para)">Include</button>
+        </p>
+    </mat-tab>
+    <mat-tab label="Gemini">
+        <button mat-raised-button (click)="askAI('gemini')">Ask Gemini</button>
+        <p *ngFor="let para of responses.gemini?.split('\n')">
+            {{ para }}
+            <button mat-button (click)="includeParagraph(para)">Include</button>
+        </p>
+    </mat-tab>
+    <mat-tab label="Claude">
+        <button mat-raised-button (click)="askAI('claude')">Ask Claude</button>
+        <p *ngFor="let para of responses.claude?.split('\n')">
+            {{ para }}
+            <button mat-button (click)="includeParagraph(para)">Include</button>
+        </p>
+    </mat-tab>
+</mat-tab-group>
