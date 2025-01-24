@@ -29,7 +29,7 @@ export class AiQueryComponent {
     if (api === 'openai') {
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer sk-sHx-9cWxs3ibDAXZ8rVrOL1yURPsXYlCt8Do9KuezfT3BlbkFJxhqerEiCiWkR4FGdYNr0LQ9te_9M4LvyqIfIRHQYUA`,
+        Authorization: `Bearer sk-sHx-9cWxs3ibDAXZ8rVrOL1yURPsXYlCt8Do9KuezfT3BlbkFJxhqerEiCiWkR4FGdYNr0Q9te_9M4LvyqIfIRHQYUA`,
         'Content-Type': 'application/json',
       });
       body = {
