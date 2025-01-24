@@ -9,7 +9,7 @@
     <mat-tab label="Gemini">
         <button mat-raised-button (click)="askAI('gemini')">Ask Gemini</button>
         <p *ngFor="let para of responses.gemini?.split('\n')">
-            {{ para }}
+            <markdown [data]="para"></markdown>
             <button mat-button (click)="includeParagraph(para)">Include</button>
         </p>
     </mat-tab>

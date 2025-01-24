@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 @Component({
   selector: 'app-ai-query',
@@ -20,7 +21,7 @@ export class AiQueryComponent {
 
   constructor(private http: HttpClient, public dialog: MatDialog) {}
 
-  askAI(api: string) {
+  async askAI(api: string) {
     let apiUrl = '';
     let headers: HttpHeaders;
     let body = {};
@@ -28,7 +29,7 @@ export class AiQueryComponent {
     if (api === 'openai') {
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+        Authorization: `Bearer sk-proj-uc0Ul96cUL1Cb6MQ2H9DT3BlbkFJz1exhYCqTMo9Q8tBn5Th`,
         'Content-Type': 'application/json',
       });
       body = {
@@ -36,14 +37,31 @@ export class AiQueryComponent {
         messages: [{ role: 'user', content: this.question }],
         temperature: 0.7,
       };
+
+      this.http.post(apiUrl, body, { headers }).subscribe(
+        (response: any) => {
+          this.responses[api] = response.choices
+            ? response.choices[0].message.content
+            : response;
+        },
+        (error) => console.error(`${api} API Error:`, error)
+      );
     } else if (api === 'gemini') {
       apiUrl =
-        'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText';
+        'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent';
       headers = new HttpHeaders({
-        Authorization: `Bearer YOUR_GEMINI_API_KEY`,
         'Content-Type': 'application/json',
       });
-      body = { prompt: { text: this.question }, temperature: 0.7 };
+      const apiKey = 'AIzaSyB0wKdU7cug8j-opNKoVGuV9AB1q9vuZAc'; // Replace with your actual API key
+
+      // Make sure to include these imports:
+      // import { GoogleGenerativeAI } from "@google/generative-ai";
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+      const result = await model.generateContent(this.question);
+
+      this.responses[api] = result.response.text();
     } else {
       apiUrl = 'https://api.anthropic.com/v1/complete';
       headers = new HttpHeaders({
@@ -56,15 +74,6 @@ export class AiQueryComponent {
         max_tokens_to_sample: 300,
       };
     }
-
-    this.http.post(apiUrl, body, { headers }).subscribe(
-      (response: any) => {
-        this.responses[api] = response.choices
-          ? response.choices[0].message.content
-          : response.candidates[0].output;
-      },
-      (error) => console.error(`${api} API Error:`, error)
-    );
   }
 
   includeParagraph(paragraph: string) {
