@@ -23,6 +23,9 @@ import { MarkdownModule } from 'ngx-markdown';
     MatCheckboxModule,
     MarkdownModule.forRoot(),
   ],
+  providers: [
+    provideHttpClient(), // Use instead of HttpClientModule
+  ],
   exports: [LayoutComponent],
 })
 export class LayoutModule {}
