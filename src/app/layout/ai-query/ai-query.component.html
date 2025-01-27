@@ -1,5 +1,8 @@
 <mat-tab-group [(selectedIndex)]="selectedTab">
     <mat-tab label="OpenAI">
+        <div *ngIf="isOpenAILoading" class="spinner-container">
+            <p>Loading response...</p>
+        </div>
         <button mat-raised-button (click)="askAI('openai')">Ask OpenAI</button>
         <p *ngFor="let para of responses.openai?.split('\n')">
             {{ para }}
@@ -7,6 +10,9 @@
         </p>
     </mat-tab>
     <mat-tab label="Gemini">
+        <div *ngIf="isGeminiLoading" class="spinner-container">
+            <p>Loading response...</p>
+        </div>
         <button mat-raised-button (click)="askAI('gemini')">Ask Gemini</button>
         <p *ngFor="let para of responses.gemini?.split('\n')">
             <markdown [data]="para"></markdown>
@@ -14,6 +20,9 @@
         </p>
     </mat-tab>
     <mat-tab label="Claude">
+        <div *ngIf="isClaudeLoading" class="spinner-container">
+            <p>Loading response...</p>
+        </div>
         <button mat-raised-button (click)="askAI('claude')">Ask Claude</button>
         <p *ngFor="let para of responses.claude?.split('\n')">
             {{ para }}

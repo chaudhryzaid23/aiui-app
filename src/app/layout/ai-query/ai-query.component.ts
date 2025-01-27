@@ -18,6 +18,9 @@ export class AiQueryComponent {
 
   responses: any = { openai: '', gemini: '', claude: '' };
   selectedTab: string = 'openai';
+  isOpenAILoading: boolean = false;
+  isGeminiLoading: boolean = false;
+  isClaudeLoading: boolean = false;
   @Output() paragraphSelected = new EventEmitter<string>();
 
   constructor(private http: HttpClient, public dialog: MatDialog) {}
@@ -27,10 +30,13 @@ export class AiQueryComponent {
     let headers: HttpHeaders;
     let body = {};
 
+    console.log('isOpenAILoading: ', this.isOpenAILoading);
+
     if (api === 'openai') {
+      this.isOpenAILoading = true;
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`,
         'Content-Type': 'application/json',
       });
       body = {
@@ -39,20 +45,20 @@ export class AiQueryComponent {
         temperature: 0.7,
       };
 
-      this.http.post(apiUrl, body, { headers }).subscribe(
-        (response: any) => {
-          this.responses[api] = response.choices
-            ? response.choices[0].message.content
-            : response;
-        },
-        (error) => console.error(`${api} API Error:`, error)
-      );
+      try {
+        console.log(this.isOpenAILoading);
+        await this.http.post(apiUrl, body, { headers }).subscribe(
+          (response: any) => {
+            this.responses[api] = response.choices
+              ? response.choices[0].message.content
+              : response;
+            this.isOpenAILoading = false;
+          },
+          (error) => console.error(`${api} API Error:`, error)
+        );
+      } catch (e) {}
     } else if (api === 'gemini') {
-      apiUrl =
-        'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent';
-      headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-      });
+      this.isGeminiLoading = true;
       const apiKey = 'AIzaSyB0wKdU7cug8j-opNKoVGuV9AB1q9vuZAc'; // Replace with your actual API key
 
       // Make sure to include these imports:
@@ -60,10 +66,14 @@ export class AiQueryComponent {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-      const result = await model.generateContent(this.question);
+      try {
+        const result = await model.generateContent(this.question);
 
-      this.responses[api] = result.response.text();
+        this.responses[api] = result.response.text();
+      } catch (e) {}
+      this.isGeminiLoading = false;
     } else {
+      this.isClaudeLoading = true;
       console.log('api: ', api);
       const anthropic = new Anthropic({
         apiKey:
@@ -71,24 +81,29 @@ export class AiQueryComponent {
         dangerouslyAllowBrowser: true,
       });
 
-      const msg: any = await anthropic.messages.create({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1000,
-        temperature: 0,
-        system: 'You are a healthcare assistant.',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: this.question,
-              },
-            ],
-          },
-        ],
-      });
-      this.responses[api] = msg[0].text;
+      try {
+        const msg: any = await anthropic.messages.create({
+          model: 'claude-3-5-sonnet-20241022',
+          max_tokens: 1000,
+          temperature: 0,
+          system: 'You are a healthcare assistant.',
+          messages: [
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'text',
+                  text: this.question,
+                },
+              ],
+            },
+          ],
+        });
+        this.responses[api] = msg[0].text;
+      } catch (e) {
+        console.log('caught');
+      }
+      this.isClaudeLoading = false;
     }
   }
 
