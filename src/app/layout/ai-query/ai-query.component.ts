@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Anthropic } from '@anthropic-ai/sdk';
 
 @Component({
   selector: 'app-ai-query',
@@ -29,7 +30,7 @@ export class AiQueryComponent {
     if (api === 'openai') {
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer sk-sHx-9cWxs3ibDAXZ8rVrOL1yURPsXYlCt8Do9KuezfT3BlbkFJxhqerEiCiWkR4FGdYNr0LQ9te_9M4LvyqIfIRHQYUA`,
+        Authorization: `Bearer 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`,
         'Content-Type': 'application/json',
       });
       body = {
@@ -63,16 +64,31 @@ export class AiQueryComponent {
 
       this.responses[api] = result.response.text();
     } else {
-      apiUrl = 'https://api.anthropic.com/v1/complete';
-      headers = new HttpHeaders({
-        Authorization: `Bearer YOUR_CLAUDE_API_KEY`,
-        'Content-Type': 'application/json',
+      console.log('api: ', api);
+      const anthropic = new Anthropic({
+        apiKey:
+          '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',
+        dangerouslyAllowBrowser: true,
       });
-      body = {
-        model: 'claude-v1',
-        prompt: this.question,
-        max_tokens_to_sample: 300,
-      };
+
+      const msg: any = await anthropic.messages.create({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 1000,
+        temperature: 0,
+        system: 'You are a healthcare assistant.',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: this.question,
+              },
+            ],
+          },
+        ],
+      });
+      this.responses[api] = msg[0].text;
     }
   }
 

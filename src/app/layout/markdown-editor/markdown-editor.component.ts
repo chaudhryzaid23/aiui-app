@@ -7,4 +7,18 @@ import { Component, Input } from '@angular/core';
 })
 export class MarkdownEditorComponent {
   @Input() markdownText: string = '';
+
+  formatText(style: string) {
+    switch (style) {
+      case 'bold':
+        this.markdownText += '**bold** ';
+        break;
+      case 'italic':
+        this.markdownText += '*italic* ';
+        break;
+      case 'heading':
+        this.markdownText += '# Heading ';
+        break;
+    }
+  }
 }

@@ -1,2 +1,16 @@
-<textarea matInput [(ngModel)]="markdownText" placeholder="Write your markdown content here..."></textarea>
-<markdown [data]="markdownText"></markdown>
+<div class="markdown-editor-container">
+    <h3>Markdown Editor</h3>
+
+    <div class="toolbar">
+        <button class="bold-button" (click)="formatText('bold')">Bold</button>
+        <button class="italic-button" (click)="formatText('italic')">Italic</button>
+        <button class="heading-button" (click)="formatText('heading')">Heading</button>
+    </div>
+
+    <textarea matInput [(ngModel)]="markdownText" placeholder="Write your markdown content here..."></textarea>
+
+    <div class="markdown-preview">
+        <h3>Preview</h3>
+        <markdown [data]="markdownText"></markdown>
+    </div>
+</div>
