@@ -23,7 +23,6 @@
     <mat-tab label="Claude">
         <div *ngIf="isClaudeLoading" class="spinner-container">
             <mat-spinner></mat-spinner>
-            <p>Loading response...</p>
         </div>
         <button mat-raised-button (click)="askAI('claude')">Ask Claude</button>
         <p *ngFor="let para of responses.claude?.split('\n')">
