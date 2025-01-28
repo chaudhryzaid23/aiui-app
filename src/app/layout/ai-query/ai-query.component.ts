@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Anthropic } from '@anthropic-ai/sdk';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-ai-query',
@@ -36,7 +37,7 @@ export class AiQueryComponent {
       this.isOpenAILoading = true;
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`,
         'Content-Type': 'application/json',
       });
       body = {

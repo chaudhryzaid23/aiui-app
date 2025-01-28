@@ -8,8 +8,10 @@ import { LayoutComponent } from './layout.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  MatProgressSpinner,
+  MatProgressSpinnerModule,
+} from '@angular/material/progress-spinner';
 import { MarkdownModule } from 'ngx-markdown';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -22,9 +24,8 @@ import { provideHttpClient } from '@angular/common/http';
     MatTabsModule,
     MatButtonModule,
     MatDialogModule,
-    MatCheckboxModule,
     MatProgressSpinnerModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forChild(),
   ],
   providers: [
     provideHttpClient(), // Use instead of HttpClientModule

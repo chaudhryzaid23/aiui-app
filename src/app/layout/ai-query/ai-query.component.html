@@ -1,17 +1,18 @@
 <mat-tab-group [(selectedIndex)]="selectedTab">
     <mat-tab label="OpenAI">
         <div *ngIf="isOpenAILoading" class="spinner-container">
+            <mat-spinner></mat-spinner>
             <p>Loading response...</p>
         </div>
         <button mat-raised-button (click)="askAI('openai')">Ask OpenAI</button>
         <p *ngFor="let para of responses.openai?.split('\n')">
-            {{ para }}
+            <markdown [data]="para"></markdown>
             <button mat-button (click)="includeParagraph(para)">Include</button>
         </p>
     </mat-tab>
     <mat-tab label="Gemini">
         <div *ngIf="isGeminiLoading" class="spinner-container">
-            <p>Loading response...</p>
+            <mat-spinner></mat-spinner>
         </div>
         <button mat-raised-button (click)="askAI('gemini')">Ask Gemini</button>
         <p *ngFor="let para of responses.gemini?.split('\n')">
@@ -21,11 +22,12 @@
     </mat-tab>
     <mat-tab label="Claude">
         <div *ngIf="isClaudeLoading" class="spinner-container">
+            <mat-spinner></mat-spinner>
             <p>Loading response...</p>
         </div>
         <button mat-raised-button (click)="askAI('claude')">Ask Claude</button>
         <p *ngFor="let para of responses.claude?.split('\n')">
-            {{ para }}
+            <markdown [data]="para"></markdown>
             <button mat-button (click)="includeParagraph(para)">Include</button>
         </p>
     </mat-tab>
