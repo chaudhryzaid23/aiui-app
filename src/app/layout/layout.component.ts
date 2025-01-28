@@ -25,10 +25,11 @@ export class LayoutComponent {
 
   renumberText() {
     // Trim leading whitespace and check if the text starts with two new lines
-    const trimmedText = this.markdownContent.trimStart();
+    this.markdownContent = `\n\n${this.markdownContent.trimStart()}`;
+    const trimmedText = this.markdownContent;
 
     // Split the text into sections based on the sequence pattern (number + period + space)
-    const sections = trimmedText.split(/\d+\.\s/).filter(Boolean);
+    const sections = trimmedText.split(/\n\n[\d+\.]+\s/).filter(Boolean);
 
     // Renumber the sections starting from 1 and remove the number and dot from each section
     const renumberedText = sections

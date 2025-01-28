@@ -40,7 +40,7 @@ export class AiQueryComponent {
       this.isOpenAILoading = true;
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`,
         'Content-Type': 'application/json',
       });
       body = {
