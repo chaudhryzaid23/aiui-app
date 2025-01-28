@@ -5,7 +5,7 @@
             <p>Loading response...</p>
         </div>
         <button mat-raised-button (click)="askAI('openai')">Ask OpenAI</button>
-        <p *ngFor="let para of responses.openai?.split('\n')">
+        <p *ngFor="let para of paras.openai">
             <markdown [data]="para"></markdown>
             <button mat-button (click)="includeParagraph(para)">Include</button>
         </p>
@@ -15,7 +15,7 @@
             <mat-spinner></mat-spinner>
         </div>
         <button mat-raised-button (click)="askAI('gemini')">Ask Gemini</button>
-        <p *ngFor="let para of responses.gemini?.split('\n')">
+        <p *ngFor="let para of paras.gemini">
             <markdown [data]="para"></markdown>
             <button mat-button (click)="includeParagraph(para)">Include</button>
         </p>
@@ -25,7 +25,7 @@
             <mat-spinner></mat-spinner>
         </div>
         <button mat-raised-button (click)="askAI('claude')">Ask Claude</button>
-        <p *ngFor="let para of responses.claude?.split('\n')">
+        <p *ngFor="let para of paras.claude">
             <markdown [data]="para"></markdown>
             <button mat-button (click)="includeParagraph(para)">Include</button>
         </p>

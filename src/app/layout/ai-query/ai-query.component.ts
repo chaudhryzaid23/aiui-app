@@ -16,10 +16,11 @@ export class AiQueryComponent {
 
   Give me a treatment plan in light of the above document I gave you in the beginning.
 
-  Have the numbers (not roman numerals) before each heading.
+  Have three exclamation marks followed by a numeric number and a dot before each heading.
   `;
 
   responses: any = { openai: '', gemini: '', claude: '' };
+  paras: any = { openai: [], gemini: [], claude: [] };
   selectedTab: string = 'openai';
   isOpenAILoading: boolean = false;
   isGeminiLoading: boolean = false;
@@ -39,11 +40,11 @@ export class AiQueryComponent {
       this.isOpenAILoading = true;
       apiUrl = 'https://api.openai.com/v1/chat/completions';
       headers = new HttpHeaders({
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`,
         'Content-Type': 'application/json',
       });
       body = {
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: this.question }],
         temperature: 0.7,
       };
@@ -53,11 +54,15 @@ export class AiQueryComponent {
         await this.http.post(apiUrl, body, { headers }).subscribe(
           (response: any) => {
             this.responses[api] = response.choices
-              ? response.choices[0].message.content
+              ? (response.choices[0].message.content.toString() as string)
               : response;
+            this.paras[api] = this.responses[api].split('!!!');
             this.isOpenAILoading = false;
           },
-          (error) => console.error(`${api} API Error:`, error)
+          (error) => {
+            console.error(`${api} API Error:`, error);
+            this.isOpenAILoading = false;
+          }
         );
       } catch (e) {}
     } else if (api === 'gemini') {
@@ -70,9 +75,11 @@ export class AiQueryComponent {
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
       try {
-        const result = await model.generateContent(this.question);
+        const result = await model.generateContent(this.question, {});
 
-        this.responses[api] = result.response.text();
+        this.responses[api] = result.response.text().toString() as string;
+
+        this.paras[api] = this.responses[api].split('!!!');
       } catch (e) {}
       this.isGeminiLoading = false;
     } else {
@@ -102,7 +109,9 @@ export class AiQueryComponent {
             },
           ],
         });
-        this.responses[api] = msg[0].text;
+        this.responses[api] = msg[0].text.toString() as string;
+
+        this.paras[api] = this.responses[api].split('!!!');
       } catch (e) {
         console.log('caught');
       }
