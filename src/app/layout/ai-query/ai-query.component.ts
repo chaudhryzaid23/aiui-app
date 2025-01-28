@@ -15,6 +15,8 @@ export class AiQueryComponent {
   The patient is a 55 year old male with type 2 diabetes for 20 years, BMI: 34, eGFR: 42, a1C: 9.3%.
 
   Give me a treatment plan in light of the above document I gave you in the beginning.
+
+  Have the numbers (not roman numerals) before each heading.
   `;
 
   responses: any = { openai: '', gemini: '', claude: '' };
